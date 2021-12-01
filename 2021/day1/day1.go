@@ -18,6 +18,7 @@ func main() {
 	}
 	count := 0
 
+	// Part 1
 	for index := 1; index < len(inputSlice); index++ {
 		if inputSlice[index] > inputSlice[index-1] {
 			count++
@@ -25,4 +26,16 @@ func main() {
 	}
 
 	fmt.Printf("Count: %d", count)
+	// Part 2
+	prevSum := 0
+	sumCounter := 0
+	for index := 1; index < len(inputSlice) - 1; index++ {
+		currSum := inputSlice[index-1] + inputSlice[index] + inputSlice[index+1]
+		if prevSum != 0 && currSum > prevSum {
+			sumCounter++
+		}
+		prevSum = currSum
+	}
+
+	fmt.Printf("\nSum Counter: %d", sumCounter)
 }
