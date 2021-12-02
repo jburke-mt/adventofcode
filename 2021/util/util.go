@@ -24,3 +24,19 @@ func ReadInts(filename string) ([]int, error) {
 	}
 	return result, scanner.Err()
 }
+
+func ReadLines(filename string) ([]string, error) {
+	file, err := os.Open(filename)
+
+	var result []string
+	if err != nil {
+		return result, err
+	}
+
+	scanner := bufio.NewScanner(file)
+	scanner.Split(bufio.ScanLines)
+	for scanner.Scan() {
+		result = append(result, scanner.Text())
+	}
+	return result, scanner.Err()
+}

@@ -1,4 +1,4 @@
-module jburke.com/advent_day1
+module jburke.com/advent_day2
 
 go 1.17
 
