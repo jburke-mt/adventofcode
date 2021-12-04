@@ -17,6 +17,7 @@ type BingoSquare struct {
 type BingoBoard struct {
 	squaresByNumber map[int]*BingoSquare // map square value to square location and marked status
 	squaresByLocation map[int]*BingoSquare // map square location to square value and marked status
+	hasWon bool
 }
 
 func ReadBingoBoard(scanner *bufio.Scanner) *BingoBoard {
@@ -108,4 +109,16 @@ func (board *BingoBoard) OutputBoard() {
 		}
 		fmt.Println()
 	}
+}
+
+func (board *BingoBoard) GetScore(winningNumber int) int {
+	sum := 0
+	for _, square := range board.GetMatchingSquares(false) {
+		sum += square.number
+	}
+	score := sum * winningNumber
+	fmt.Printf("Winning number: %d\n", winningNumber)
+	fmt.Printf("Sum: %d\n", sum)
+	fmt.Printf("Score: %d\n", score)
+	return score
 }

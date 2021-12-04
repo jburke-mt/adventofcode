@@ -30,11 +30,31 @@ func get_winning_board(calledNumbers []int, boards []*BingoBoard) (*BingoBoard, 
 			board.MarkSquare(num)
 			winning_row, winning_col := board.GetWinningRowOrCol()
 			if winning_row != nil || winning_col != nil {
+				board.hasWon = true
 				return board, num
 			}
 		}
 	}
 	return nil, -1
+}
+
+func get_last_winning_board(calledNumbers []int, boards []*BingoBoard) (*BingoBoard, int) {
+	var winning_board *BingoBoard
+	winning_number := -1
+	for _, num := range calledNumbers {
+		for _, board := range boards {
+			if !board.hasWon {
+				board.MarkSquare(num)
+				winning_row, winning_col := board.GetWinningRowOrCol()
+				if winning_row != nil || winning_col != nil {
+					board.hasWon = true
+					winning_board = board
+					winning_number = num
+				}
+			}
+		}
+	}
+	return winning_board, winning_number
 }
 
 func main() {
@@ -58,14 +78,15 @@ func main() {
 		panic(scanner_err)
 	}
 
+	// part 1
 	winning_board, winning_number := get_winning_board(calledNumbers, boards)
-	sum := 0
-	for _, unmarked := range winning_board.GetMatchingSquares(false) {
-		sum += unmarked.number
-	}
 	fmt.Println("Winning board:")
 	winning_board.OutputBoard()
-	fmt.Printf("Sum: %d\n", sum)
-	fmt.Printf("Winning number: %d\n", winning_number)
-	fmt.Printf("Product: %d\n", sum*winning_number)
+	winning_board.GetScore(winning_number)
+
+	// part 2
+	last_winning_board, last_winning_number := get_last_winning_board(calledNumbers, boards)
+	fmt.Println("Last winning board:")
+	last_winning_board.OutputBoard()
+	last_winning_board.GetScore(last_winning_number)
 }
