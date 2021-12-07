@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func ReadInts(filename string) ([]int, error) {
@@ -39,4 +40,16 @@ func ReadLines(filename string) ([]string, error) {
 		result = append(result, scanner.Text())
 	}
 	return result, scanner.Err()
+}
+
+func StrToInts(s string) ([]int, error) {
+	var result []int
+	for _, c := range strings.Split(s, ",") {
+		i, err := strconv.Atoi(string(c))
+		if err != nil {
+			return result, err
+		}
+		result = append(result, i)
+	}
+	return result, nil
 }
