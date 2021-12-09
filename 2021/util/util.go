@@ -53,3 +53,11 @@ func StrToInts(s string) ([]int, error) {
 	}
 	return result, nil
 }
+
+func SumCounts(counts map[int]int) int {
+	var result int
+	for _, v := range counts {
+		result += v
+	}
+	return result
+}
