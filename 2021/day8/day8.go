@@ -34,14 +34,31 @@ func part1(lines []string) {
 	fmt.Printf("Sum of counts: %d\n", sumCounts)
 }
 
-// func part2(lines []string) {
+func part2(lines []string) int {
+	sum := 0
+	for _, line := range lines {
+		line_split := strings.Split(line, "|")
+		signal_patterns := line_split[0]
+		digit_mapping, unknowns := KnownDigitsFromInput(signal_patterns)
+		fmt.Printf("digit_mapping: %v\n", digit_mapping)
+		fmt.Printf("unknowns: %v\n", unknowns)
+		mid_mapping, remaining := UnknownDigitsFromInput(digit_mapping, unknowns)
+		fmt.Printf("final_mapping: %v\n", mid_mapping)
+		fmt.Printf("remaining: %v\n", remaining)
+		final_mapping := RemainingUnknowns(mid_mapping, remaining)
+		fmt.Printf("final_mapping: %v\n", final_mapping)
 
-// 	for _, line := range lines {
-// 		line_split := strings.Split(line, "|")
-// 		signal_patterns := line_split[0]
-// 		output := line_split[1]
-// 	}
-// }
+		sorted_mapping := SortKeys(final_mapping)
+		fmt.Printf("sorted_mapping: %v\n", sorted_mapping)
+
+		output := line_split[1]
+		fmt.Printf("output: %v\n", strings.Fields(output))
+		num := OutputToNumber(sorted_mapping, line_split[1])
+		fmt.Printf("num: %d\n", num)
+		sum += num
+	}
+	return sum
+}
 
 func main() {
 	const filename = "input.txt"
@@ -55,6 +72,6 @@ func main() {
 	part1(lines)
 	
 	// part 2
-	charToInt := int('b' - 97)
-	fmt.Printf("a as int: %d\n", charToInt)
+	sum := part2(lines)
+	fmt.Printf("sum: %d\n", sum)
 }
