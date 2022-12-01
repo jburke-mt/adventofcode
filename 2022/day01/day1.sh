@@ -1,17 +1,26 @@
 #!/usr/bin/env bash
 
-elf_index=0
 max_sum=0
 cur_sum=0
-while IFS= read -r elf_line; do
+cal_sums=()
+
+append_cur_sum() {
+    if [[ $cur_sum -gt $max_sum ]]; then
+        max_sum=$cur_sum
+    fi
+    cal_sums+=("$cur_sum")
+    cur_sum=0
+}
+
+while IFS= read -r elf_line || [[ -n "$elf_line" ]]; do
     if [[ -z $elf_line ]]; then
-        if [[ $cur_sum -gt $max_sum ]]; then
-            max_sum=$cur_sum
-        fi
-        cur_sum=0
-        ((elf_index=elf_index + 1)) # keeping track of this incase we need to do more with this input in future exercises
+        append_cur_sum
     else
         ((cur_sum=cur_sum + elf_line))
     fi
 done < "$1"
-echo $max_sum
+append_cur_sum # handle no newline at end of file
+echo $max_sum # part a
+IFS=$'\n' read -r -d '' -a sorted_cals < <(printf "%s\n" "${cal_sums[@]}" | sort -n -r && printf '\0')
+top_3_sums=$((sorted_cals[0] + sorted_cals[1] + sorted_cals[2]))
+echo $top_3_sums # part b
